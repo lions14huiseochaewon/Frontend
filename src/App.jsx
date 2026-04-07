@@ -1,26 +1,36 @@
-import Button from "./components/Button";
-import Card from "./components/Card";
-import Input_number from "./components/Input_number";
-import Input_text from "./components/Input_text";
-import Textarea from "./components/Textarea";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import GNB from "./components/GNB";
+import Home from "./pages/Home";
+import Items from "./pages/Items";
+import Login from "./pages/Login";
+import MyPage from "./pages/MyPage";
+import QRRental from "./pages/QRRental";
+import Signup from "./pages/Signup";
+
+function LayoutWithGNB() {
+  return (
+    <>
+      <Outlet />
+      <GNB />
+    </>
+  );
+}
 
 function App() {
   return (
-    <>
-      <div className="container">
-        <h1>토이 프로젝트!</h1>
-        <h3>by 하희서</h3>
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
 
-        <img src="/images/예르.jpg" style={{ width: "200px" }} />
-        <h4 className="linethrough">예르말고야르예요</h4>
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
 
-        <Card />
-        <Button />
-        <Input_text />
-        <Input_number />
-        <Textarea />
-      </div>
-    </>
+      <Route element={<LayoutWithGNB />}>
+        <Route path="/home" element={<Home />} />
+        <Route path="/items" element={<Items />} />
+        <Route path="/qr-rental" element={<QRRental />} />
+        <Route path="/mypage" element={<MyPage />} />
+      </Route>
+    </Routes>
   );
 }
 
