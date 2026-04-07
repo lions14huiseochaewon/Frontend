@@ -1,0 +1,19 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+body {
+  font-family: Pretendard;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 32px;
+}
+
+.linethrough {
+  text-decoration: line-through;
+  color: gray;
+  margin-bottom: 4px;
+}
