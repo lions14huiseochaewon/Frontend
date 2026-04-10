@@ -30,13 +30,28 @@ function Home() {
   }, [location.state]);
 
   return (
-    <main>
+    <main className="mx-auto h-[874px] w-[402px]">
       {toast && <div>{toast}</div>}
-      <section>
-        <h1>Believe</h1>
-        <p>*** 님 환영합니다!</p>
+      {/*로고*/}
+      <section className="mt-[171px] flex justify-center p-[10px]">
+        <img src="/icons/Believe.svg" />
+      </section>
+      {/*환영인사*/}
+      <section className="flex justify-center">
+        <h2 className="text-center text-[15px] font-normal whitespace-nowrap">
+          *** 님 환영합니다!
+        </h2>
       </section>
 
+      <section>
+        <h2 className="font-size-[15px] w-[330px] items-center font-medium">
+          나의 대여상태
+        </h2>
+        <button onClick={() => navigate("/mypage")}>
+          <p>{rentedItem.name} 대여중</p>
+          <p>반납일자 | {rentedItem.dueDate}</p>
+        </button>
+      </section>
       <section>
         <div>
           <h2>대여 가능 물품</h2>
@@ -50,14 +65,6 @@ function Home() {
             </button>
           ))}
         </div>
-      </section>
-
-      <section>
-        <h2>나의 대여상태</h2>
-        <button onClick={() => navigate("/mypage")}>
-          <p>{rentedItem.name} 대여중</p>
-          <p>반납일자 | {rentedItem.dueDate}</p>
-        </button>
       </section>
     </main>
   );

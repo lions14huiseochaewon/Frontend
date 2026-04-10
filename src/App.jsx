@@ -9,10 +9,10 @@ import Signup from "./pages/Signup";
 
 function LayoutWithGNB() {
   return (
-    <>
+    <div>
       <Outlet />
       <GNB />
-    </>
+    </div>
   );
 }
 

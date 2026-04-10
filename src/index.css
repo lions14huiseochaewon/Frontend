@@ -1,19 +1,20 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+@import "tailwindcss";
+@import url("https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css");
 
-body {
-  font-family: Pretendard;
-}
+@theme {
+  /* =====================
+	     Font Families
+	  ===================== */
+  --font-pretendard:
+    "Pretendard Variable", "Pretendard", system-ui, -apple-system,
+    BlinkMacSystemFont;
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 32px;
-}
-
-.linethrough {
-  text-decoration: line-through;
-  color: gray;
-  margin-bottom: 4px;
+  /* =====================
+     Colors
+  ===================== */
+  --color-main-1: #020913;
+  --color-main-2: #204470;
+  --color-main-3: #487ecf;
+  --color-main-4: #a1bff5;
+  --color-main-5: #ffffff;
 }
