@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
-import GNB from "./components/GNB";
+import NavigationBarLayout from "./layouts/NavigationBarLayout";
 import Home from "./pages/Home";
 import Items from "./pages/Items";
 import Login from "./pages/Login";
@@ -11,7 +11,7 @@ function LayoutWithGNB() {
   return (
     <div>
       <Outlet />
-      <GNB />
+      <NavigationBarLayout />
     </div>
   );
 }
