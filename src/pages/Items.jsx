@@ -1,8 +1,10 @@
 import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useToastStore from "../store/useToastStore";
 
 function Items() {
   const navigate = useNavigate();
+  const showToast = useToastStore((state) => state.showToast);
   const [showAvailableOnly, setShowAvailableOnly] = useState(false);
   const [sortOption, setSortOption] = useState("popular");
   const [isSortOpen, setIsSortOpen] = useState(false);
@@ -16,6 +18,7 @@ function Items() {
       rentableDays: 7,
       returnDate: "26.01.01",
       description: "영상 촬영에 사용할 수 있는 카메라",
+      image: "/images/camera.jpg",
       isAvailable: true,
       rentalCount: 15,
       createdAt: "2026-04-01",
@@ -26,6 +29,7 @@ function Items() {
       rentableDays: 5,
       returnDate: "26.01.03",
       description: "카메라 고정할 때 좋아요",
+      image: "/images/tripod.jpg",
       isAvailable: false,
       rentalCount: 8,
       createdAt: "2026-04-05",
@@ -36,6 +40,7 @@ function Items() {
       rentableDays: 3,
       returnDate: "26.01.05",
       description: "녹음 음질 낫 배드",
+      image: "/images/microphone.jpg",
       isAvailable: true,
       rentalCount: 12,
       createdAt: "2026-04-03",
@@ -46,6 +51,7 @@ function Items() {
       rentableDays: 4,
       returnDate: "26.01.07",
       description: "촬영용 보조 조명입니다.",
+      image: "/images/lamp.jpg",
       isAvailable: true,
       rentalCount: 4,
       createdAt: "2026-04-06",
@@ -81,36 +87,100 @@ function Items() {
 
   useEffect(() => {
     if (step === "done" && selectedItem) {
-      navigate("/home", {
-        state: { toast: `${selectedItem.name}이 대여 완료되었습니다.` },
-      });
+      showToast(`[${selectedItem.name}]이 대여 완료되었습니다.`);
+      navigate("/home");
     }
-  }, [step, selectedItem, navigate]);
+  }, [step, selectedItem, navigate, showToast]);
 
   if (step === "confirm" && selectedItem) {
     return (
-      <main>
-        <h1>물품 대여 확인</h1>
-        <p>사진</p>
-        <p>{selectedItem.name}을 대여하시겠습니까?</p>
-        <p>
-          반납일 | {year}년 {month}월 {date}일
-        </p>
-        <button onClick={() => setStep("done")}>예</button>
-        <button onClick={() => setStep("detail")}>아니오</button>
+      <main className="mx-auto h-[874px] w-[402px] bg-white">
+        <section className="pt-[190px]">
+          <div className="mx-auto h-[202px] w-[202px] overflow-hidden bg-[#838383]">
+            <img
+              src={selectedItem.image}
+              alt={selectedItem.name}
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </section>
+
+        <section className="mx-auto mt-[52px] flex h-[215px] w-[300px] flex-col items-center rounded-[20px] bg-[#EEF4FF] pt-[47px]">
+          <p className="text-[20px] font-semibold text-[#020913]">
+            ({selectedItem.name}) 를 대여하시겠습니까?
+          </p>
+
+          <p className="mt-[18px] text-[15px] font-normal text-[#020913]">
+            반납 일자: {year}.{String(month).padStart(2, "0")}.
+            {String(date).padStart(2, "0")}
+          </p>
+
+          <div className="mt-[43px] flex gap-[27px]">
+            <button
+              type="button"
+              onClick={() => setStep("detail")}
+              className="h-[43px] w-[123px] rounded-[22px] border border-[var(--color-main-2)] bg-[#EEF4FF] text-[15px] font-semibold text-[#020913] outline-none focus:ring-0 focus:outline-none"
+            >
+              취소
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setStep("done")}
+              className="h-[43px] w-[123px] rounded-[22px] bg-[var(--color-main-2)] text-[15px] font-semibold text-white outline-none focus:ring-0 focus:outline-none"
+            >
+              확인
+            </button>
+          </div>
+        </section>
       </main>
     );
   }
 
   if (step === "detail" && selectedItem) {
     return (
-      <main>
-        <button onClick={() => setStep("list")}>{"<"} 뒤로가기</button>
-        <p>사진</p>
-        <h2>{selectedItem.name}</h2>
-        <p>대여기간 {selectedItem.rentableDays}일</p>
-        <p>{selectedItem.description}</p>
-        <button onClick={() => setStep("confirm")}>대여하기</button>
+      <main className="mx-auto min-h-[874px] w-[402px] bg-white pb-[120px]">
+        <header className="flex h-[43px] w-full items-center bg-[#D9D9D9] px-[37px]">
+          <button
+            type="button"
+            onClick={() => setStep("list")}
+            className="text-[28px] leading-none font-light text-[#707070] outline-none focus:ring-0 focus:outline-none"
+          >
+            ‹
+          </button>
+        </header>
+
+        <section className="px-[37px] pt-[32px]">
+          <div className="mx-auto h-[287px] w-[287px] overflow-hidden bg-[#838383]">
+            <img
+              src={selectedItem.image}
+              alt={selectedItem.name}
+              className="h-full w-full object-cover"
+            />
+          </div>
+
+          <div className="mx-auto mt-[27px] flex w-[287px] items-baseline gap-[34px]">
+            <h2 className="w-[130px] text-[24px] leading-none font-semibold text-[#020913]">
+              {selectedItem.name}
+            </h2>
+
+            <p className="text-[15px] leading-none font-normal text-[#707070]">
+              대여기간 {selectedItem.rentableDays}일
+            </p>
+          </div>
+
+          <p className="mx-auto mt-[34px] w-[287px] text-[15px] leading-[28px] font-normal text-[#707070]">
+            {selectedItem.description}
+          </p>
+
+          <button
+            type="button"
+            onClick={() => setStep("confirm")}
+            className="mx-auto mt-[184px] flex h-[31px] w-[107px] items-center justify-center rounded-[5px] bg-[#D9D9D9] text-[15px] font-normal text-[#020913] outline-none focus:ring-0 focus:outline-none"
+          >
+            대여하기
+          </button>
+        </section>
       </main>
     );
   }
@@ -202,9 +272,13 @@ function Items() {
                 setSelectedItem(item);
                 setStep("detail");
               }}
-              className="flex h-[153px] w-[153px] items-center justify-center bg-[#838383] text-[15px] font-medium text-black"
+              className="h-[153px] w-[153px] overflow-hidden bg-[#838383]"
             >
-              사진
+              <img
+                src={item.image}
+                alt={item.name}
+                className="h-full w-full object-cover"
+              />
             </button>
 
             <div className="mt-[10px] flex items-center justify-between gap-[8px]">

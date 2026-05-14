@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
+import useToastStore from "../store/useToastStore";
 
 function MyPage() {
+  const showToast = useToastStore((state) => state.showToast);
   const [mode, setMode] = useState("user");
   const [step, setStep] = useState("userMain");
-  const [toast, setToast] = useState("");
   const [selectedRental, setSelectedRental] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedAdminItem, setSelectedAdminItem] = useState(null);
@@ -22,21 +23,25 @@ function MyPage() {
       id: 1,
       name: "캐논 카메라",
       dueDate: "26.01.01",
+      image: "/images/camera.jpg",
     },
     {
       id: 2,
       name: "삼각대",
       dueDate: "26.01.03",
+      image: "/images/tripod.jpg",
     },
     {
       id: 3,
       name: "마이크",
       dueDate: "26.01.05",
+      image: "/images/microphone.jpg",
     },
     {
       id: 4,
       name: "조명",
       dueDate: "26.01.07",
+      image: "/images/lamp.jpg",
     },
   ]);
 
@@ -46,24 +51,28 @@ function MyPage() {
       name: "캐논 카메라",
       rentableDays: 7,
       description: "영상 촬영에 사용할 수 있는 카메라입니다.",
+      image: "/images/camera.jpg",
     },
     {
       id: 2,
       name: "삼각대",
       rentableDays: 5,
       description: "카메라를 안정적으로 고정할 수 있는 삼각대입니다.",
+      image: "/images/tripod.jpg",
     },
     {
       id: 3,
       name: "마이크",
       rentableDays: 3,
       description: "음성 녹음용 마이크입니다.",
+      image: "/images/microphone.jpg",
     },
     {
       id: 4,
       name: "조명",
       rentableDays: 4,
       description: "촬영용 보조 조명입니다.",
+      image: "/images/lamp.jpg",
     },
   ]);
 
@@ -136,16 +145,6 @@ function MyPage() {
     return adminRecords.filter((record) => record.status === selectedStatus);
   }, [adminRecords, selectedStatus]);
 
-  useEffect(() => {
-    if (toast) {
-      const timer = setTimeout(() => {
-        setToast("");
-      }, 1500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [toast]);
-
   const handleAdminItemChange = (field, value) => {
     setSelectedAdminItem((prev) => ({
       ...prev,
@@ -165,14 +164,14 @@ function MyPage() {
       };
 
       setAdminItems((prev) => [...prev, newItem]);
-      setToast(`${newItem.name}이 등록되었습니다.`);
+      showToast(`${newItem.name}이 등록되었습니다.`);
     } else {
       setAdminItems((prev) =>
         prev.map((item) =>
           item.id === selectedAdminItem.id ? selectedAdminItem : item,
         ),
       );
-      setToast(`${selectedAdminItem.name}이 수정되었습니다.`);
+      showToast(`${selectedAdminItem.name}이 수정되었습니다.`);
     }
 
     setStep("adminMain");
@@ -190,19 +189,11 @@ function MyPage() {
   if (mode === "user" && step === "userConfirm" && selectedRental) {
     return (
       <main className="relative mx-auto min-h-screen w-full max-w-[402px] bg-white px-[36px] pt-[36px] pb-[120px]">
-        {toast && (
-          <div className="toast-fade fixed top-[32px] left-1/2 z-[100] flex h-[60px] w-[360px] -translate-x-1/2 items-center rounded-[10px] bg-[#222222] px-[21px] text-[15px] font-normal text-white">
-            {toast}
-          </div>
-        )}
-
         <div className="pointer-events-none opacity-35">
-          <section className="mt-[36px] mb-[32px] flex h-[181px] w-full items-center rounded-[30px] bg-[#F4F8FF] px-[21px]">
+          <section className="mt-[36px] mb-[32px] flex h-[180px] w-[360px] items-center rounded-[30px] bg-[#F4F8FF] px-[21px]">
             <div className="flex w-full items-center justify-between">
               <div className="flex items-center gap-[16px]">
-                <div className="flex h-[64px] w-[64px] items-center justify-center rounded-full bg-[var(--color-main-2)] text-[32px] text-white">
-                  👤
-                </div>
+                <img src="/icons/profile.svg"></img>
 
                 <div>
                   <p className="text-[12px] font-normal text-[#020913]">
@@ -236,8 +227,12 @@ function MyPage() {
             <div className="grid grid-cols-2 gap-x-[14px] gap-y-[28px]">
               {userRentals.map((rental) => (
                 <div key={rental.id} className="w-full">
-                  <div className="flex aspect-square w-full items-center justify-center bg-[#8C8C8C] text-[16px] text-black">
-                    사진
+                  <div className="aspect-square w-full overflow-hidden bg-[#8C8C8C]">
+                    <img
+                      src={rental.image}
+                      alt={rental.name}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
 
                   <div className="mt-[10px] flex items-center justify-between gap-[8px]">
@@ -266,29 +261,33 @@ function MyPage() {
 
         <div className="absolute inset-0 bg-black/20" />
 
-        <section className="fixed top-[343px] left-1/2 z-50 flex h-[191px] w-[377px] -translate-x-1/2 flex-col items-center rounded-[10px] bg-[#F7F7F7] px-[13px] pt-[58px]">
-          <p className="text-[20px] font-normal text-[#020913]">
-            [{selectedRental.name}]를 반납하시겠습니까?
+        <section className="fixed top-[290px] left-1/2 z-50 flex h-[249px] w-[370px] -translate-x-1/2 flex-col items-center rounded-[20px] bg-[#EEF4FF] pt-[47px]">
+          <p className="text-[20px] font-semibold text-[#020913]">
+            [{selectedRental.name}] 을 반납하시겠습니까?
           </p>
 
-          <div className="mt-[31px] flex gap-[20px]">
-            <button
-              type="button"
-              onClick={handleReturnConfirm}
-              className="h-[32px] w-[107px] rounded-[6px] bg-[#D9D9D9] text-[15px] font-normal text-[#020913]"
-            >
-              예
-            </button>
+          <p className="mt-[18px] text-[15px] font-normal text-[#020913]">
+            반납 일자: {selectedRental.dueDate}
+          </p>
 
+          <div className="mt-[43px] flex gap-[27px]">
             <button
               type="button"
               onClick={() => {
                 setSelectedRental(null);
                 setStep("userMain");
               }}
-              className="h-[32px] w-[107px] rounded-[6px] bg-[#D9D9D9] text-[15px] font-normal text-[#020913]"
+              className="h-[45px] w-[140px] rounded-[22px] border border-[var(--color-main-2)] bg-[#EEF4FF] text-[15px] font-semibold text-[#020913] outline-none focus:ring-0 focus:outline-none"
             >
-              아니오
+              취소
+            </button>
+
+            <button
+              type="button"
+              onClick={handleReturnConfirm}
+              className="h-[45px] w-[140px] rounded-[22px] bg-[var(--color-main-2)] text-[15px] font-semibold text-white outline-none focus:ring-0 focus:outline-none"
+            >
+              확인
             </button>
           </div>
         </section>
@@ -299,12 +298,6 @@ function MyPage() {
   if (mode === "admin" && step === "adminStatus") {
     return (
       <main className="mx-auto min-h-screen w-full max-w-[402px] bg-white px-[36px] pt-[76px] pb-[120px]">
-        {toast && (
-          <div className="toast-fade fixed top-[32px] left-1/2 z-[100] flex h-[60px] w-[360px] -translate-x-1/2 items-center rounded-[10px] bg-[#222222] px-[21px] text-[15px] font-normal text-white">
-            {toast}
-          </div>
-        )}
-
         <h1 className="text-[24px] font-normal text-[#020913]">
           대여 상세 내역
         </h1>
@@ -405,12 +398,6 @@ function MyPage() {
   if (mode === "admin" && step === "adminEdit" && selectedAdminItem) {
     return (
       <main className="mx-auto min-h-screen w-full max-w-[402px] bg-white pb-[120px]">
-        {toast && (
-          <div className="toast-fade fixed top-[32px] left-1/2 z-[100] flex h-[60px] w-[360px] -translate-x-1/2 items-center rounded-[10px] bg-[#222222] px-[21px] text-[15px] font-normal text-white">
-            {toast}
-          </div>
-        )}
-
         <header className="flex h-[43px] w-full items-center bg-[#D9D9D9] px-[37px]">
           <button
             type="button"
@@ -422,8 +409,12 @@ function MyPage() {
         </header>
 
         <section className="px-[37px] pt-[32px]">
-          <div className="mx-auto flex h-[287px] w-[287px] items-center justify-center bg-[#838383] text-[15px] font-normal text-black">
-            사진
+          <div className="mx-auto h-[287px] w-[287px] overflow-hidden bg-[#838383]">
+            <img
+              src={selectedAdminItem.image}
+              alt={selectedAdminItem.name}
+              className="h-full w-full object-cover"
+            />
           </div>
 
           <div className="mx-auto mt-[27px] flex w-[287px] items-baseline gap-[34px]">
@@ -478,12 +469,6 @@ function MyPage() {
   if (mode === "admin") {
     return (
       <main className="mx-auto min-h-screen w-full max-w-[402px] bg-white px-[36px] pt-[76px] pb-[120px]">
-        {toast && (
-          <div className="toast-fade fixed top-[32px] left-1/2 z-[100] flex h-[60px] w-[360px] -translate-x-1/2 items-center rounded-[10px] bg-[#222222] px-[21px] text-[15px] font-normal text-white">
-            {toast}
-          </div>
-        )}
-
         <h1 className="text-[24px] font-bold text-[#020913]">관리자 모드</h1>
 
         <section className="mt-[45px]">
@@ -584,8 +569,12 @@ function MyPage() {
                 }}
                 className="w-full text-left"
               >
-                <div className="flex aspect-square w-full items-center justify-center bg-[#838383] text-[15px] font-medium text-black">
-                  사진
+                <div className="aspect-square w-full overflow-hidden bg-[#838383]">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
 
                 <p className="mt-[10px] text-[12px] leading-none font-normal text-[#020913]">
@@ -601,18 +590,14 @@ function MyPage() {
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-[402px] bg-white px-[36px] pt-[36px] pb-[120px]">
-      {toast && (
-        <div className="toast-fade fixed top-[32px] left-1/2 z-[100] flex h-[60px] w-[360px] -translate-x-1/2 items-center rounded-[10px] bg-[#222222] px-[21px] text-[15px] font-normal text-white">
-          {toast}
-        </div>
-      )}
-
       <section className="mt-[36px] mb-[32px] flex h-[181px] w-full items-center rounded-[30px] bg-[#F4F8FF] px-[21px]">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-[16px]">
-            <div className="flex h-[64px] w-[64px] items-center justify-center rounded-full bg-[var(--color-main-2)] text-[32px] text-white">
-              👤
-            </div>
+            <img
+              src="/icons/profile.svg"
+              alt="프로필"
+              className="h-[64px] w-[64px]"
+            />
 
             <div>
               <p className="text-[12px] font-normal text-[#020913]">
@@ -654,8 +639,12 @@ function MyPage() {
         <div className="grid grid-cols-2 gap-x-[14px] gap-y-[28px]">
           {userRentals.map((rental) => (
             <div key={rental.id} className="w-full">
-              <div className="flex aspect-square w-full items-center justify-center bg-[#8C8C8C] text-[16px] text-black">
-                사진
+              <div className="aspect-square w-full overflow-hidden bg-[#8C8C8C]">
+                <img
+                  src={rental.image}
+                  alt={rental.name}
+                  className="h-full w-full object-cover"
+                />
               </div>
 
               <div className="mt-[10px] flex items-center justify-between gap-[8px]">
@@ -695,7 +684,7 @@ function MyPage() {
     setUserRentals((prev) =>
       prev.filter((rental) => rental.id !== selectedRental.id),
     );
-    setToast(`${selectedRental.name}이 반납 완료되었습니다.`);
+    showToast(`[${selectedRental.name}]이 반납 완료되었습니다.`);
     setSelectedRental(null);
     setStep("userMain");
   }

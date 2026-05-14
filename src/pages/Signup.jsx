@@ -12,6 +12,20 @@ function Signup() {
   const [role, setRole] = useState("");
   const [phone, setPhone] = useState("");
 
+  const formatPhoneNumber = (value) => {
+    const numbers = value.replace(/[^0-9]/g, "");
+
+    if (numbers.length < 4) {
+      return numbers;
+    }
+
+    if (numbers.length < 8) {
+      return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+    }
+
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+  };
+
   const handleSignup = () => {
     if (
       !id ||
@@ -52,7 +66,7 @@ function Signup() {
             placeholder="아이디를 입력하세요"
             value={id}
             onChange={(e) => setId(e.target.value)}
-            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F7F7F7] px-[12px] text-[12px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
+            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F4F8FF] px-[12px] text-[12px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
           />
         </div>
 
@@ -69,7 +83,7 @@ function Signup() {
             placeholder="비밀번호를 입력하세요"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F7F7F7] px-[12px] text-[12px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
+            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F4F8FF] px-[12px] text-[12px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
           />
         </div>
 
@@ -86,7 +100,7 @@ function Signup() {
             placeholder="비밀번호를 한번 더 입력하세요"
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
-            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F7F7F7] px-[12px] text-[12px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
+            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F4F8FF] px-[12px] text-[12px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
           />
         </div>
 
@@ -103,7 +117,7 @@ function Signup() {
             placeholder="이름을 입력하세요"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F7F7F7] px-[12px] text-[12px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
+            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F4F8FF] px-[12px] text-[12px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
           />
         </div>
 
@@ -120,7 +134,7 @@ function Signup() {
             placeholder="학과 검색"
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
-            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F7F7F7] px-[12px] text-center text-[12px] text-[#020913] outline-none placeholder:text-[#707070] focus:ring-0 focus:outline-none"
+            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F4F8FF] px-[12px] text-center text-[12px] text-[#020913] outline-none placeholder:text-[#707070] focus:ring-0 focus:outline-none"
           />
         </div>
 
@@ -135,7 +149,7 @@ function Signup() {
             id="signup-role"
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F7F7F7] px-[12px] text-[12px] text-[#707070] outline-none focus:ring-0 focus:outline-none"
+            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F4F8FF] px-[12px] text-[12px] text-[#707070] outline-none focus:ring-0 focus:outline-none"
           >
             <option value="">접속권한을 선택해주세요</option>
             <option value="user">이용자</option>
@@ -153,10 +167,11 @@ function Signup() {
           <input
             id="signup-phone"
             type="text"
+            inputMode="numeric"
             placeholder="전화번호를 입력하세요"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F7F7F7] px-[12px] text-[12px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
+            onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
+            className="h-[34px] w-[213px] rounded-[6px] border border-[#D9D9D9] bg-[#F4F8FF] px-[12px] text-[12px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
           />
         </div>
       </section>
@@ -164,7 +179,7 @@ function Signup() {
       <button
         type="button"
         onClick={handleSignup}
-        className="mt-[38px] flex h-[45px] w-full items-center justify-center rounded-[10px] bg-[#838383] text-[15px] font-normal text-white outline-none focus:ring-0 focus:outline-none"
+        className="mt-[38px] flex h-[45px] w-full items-center justify-center rounded-[30px] bg-[var(--color-main-2)] text-[15px] font-normal text-white outline-none focus:ring-0 focus:outline-none"
       >
         가입 완료 →
       </button>
