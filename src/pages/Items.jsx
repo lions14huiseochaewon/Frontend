@@ -140,11 +140,11 @@ function Items() {
   if (step === "detail" && selectedItem) {
     return (
       <main className="mx-auto min-h-[874px] w-[402px] bg-white pb-[120px]">
-        <header className="flex h-[43px] w-full items-center bg-[#D9D9D9] px-[37px]">
+        <header className="flex h-[49px] w-full items-center bg-[var(--color-main-2)] px-[26px]">
           <button
             type="button"
             onClick={() => setStep("list")}
-            className="text-[28px] leading-none font-light text-[#707070] outline-none focus:ring-0 focus:outline-none"
+            className="text-[28px] leading-none font-light text-[#F4F8FF] outline-none focus:ring-0 focus:outline-none"
           >
             ‹
           </button>
