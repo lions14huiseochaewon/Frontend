@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../store/useAuthStore";
 
 function Login() {
   const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const login = useAuthStore((state) => state.login);
 
   const handleLogin = () => {
     if (id && password) {
+      login({
+        id,
+        name: "김이름",
+        role: "user",
+      });
       navigate("/home");
     }
   };
@@ -27,10 +34,10 @@ function Login() {
 
         <input
           type="text"
-          placeholder="아이디를 입력하세요"
+          placeholder="아이디를 입력하세요."
           value={id}
           onChange={(event) => setId(event.target.value)}
-          className="h-[42px] w-full rounded-[10px] border border-[#D9D9D9] bg-[#F7F7F7] px-[15px] text-[15px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
+          className="h-[42px] w-full rounded-[10px] border border-[#D9D9D9] bg-[#F4F8FF] px-[15px] text-[15px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
         />
       </section>
 
@@ -41,17 +48,17 @@ function Login() {
 
         <input
           type="password"
-          placeholder="비밀번호를 입력하세요"
+          placeholder="비밀번호를 입력하세요."
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="h-[42px] w-full rounded-[10px] border border-[#D9D9D9] bg-[#F7F7F7] px-[15px] text-[15px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
+          className="h-[42px] w-full rounded-[10px] border border-[#D9D9D9] bg-[#F4F8FF] px-[15px] text-[15px] text-[#020913] outline-none placeholder:text-[#B3B3B3] focus:ring-0 focus:outline-none"
         />
       </section>
 
       <button
         type="button"
         onClick={handleLogin}
-        className="mt-[38px] flex h-[45px] w-full items-center justify-center rounded-[10px] bg-[#838383] text-[15.723px] font-semibold text-white outline-none focus:ring-0 focus:outline-none"
+        className="mt-[38px] flex h-[45px] w-full items-center justify-center rounded-[30px] bg-[var(--color-main-2)] text-[15.723px] font-semibold text-white outline-none focus:ring-0 focus:outline-none"
       >
         로그인 →
       </button>

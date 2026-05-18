@@ -1,18 +1,16 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [toast, setToast] = useState("");
 
   const availableItems = [
-    { id: 1, name: "물건1" },
-    { id: 2, name: "물건2" },
-    { id: 3, name: "물건3" },
-    { id: 4, name: "물건4" },
-    { id: 5, name: "물건5" },
-    { id: 6, name: "물건6" },
+    { id: 1, name: "카메라", image: "/images/camera.jpg" },
+    { id: 2, name: "삼각대", image: "/images/tripod.jpg" },
+    { id: 3, name: "마이크", image: "/images/microphone.jpg" },
+    { id: 4, name: "조명", image: "/images/lamp.jpg" },
+    { id: 5, name: "카메라", image: "/images/camera.jpg" },
+    { id: 6, name: "삼각대", image: "/images/tripod.jpg" },
   ];
 
   const [scrollIndex, setScrollIndex] = useState(0);
@@ -23,26 +21,8 @@ function Home() {
     dueDate: "260410",
   };
 
-  useEffect(() => {
-    if (location.state?.toast) {
-      setToast(location.state.toast);
-
-      const timer = setTimeout(() => {
-        setToast("");
-      }, 1500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [location.state]);
-
   return (
     <main className="mx-auto h-[874px] w-[402px]">
-      {toast && (
-        <div className="toast-fade fixed top-[32px] left-1/2 z-[100] flex h-[60px] w-[360px] -translate-x-1/2 items-center rounded-[10px] bg-[#222222] px-[21px] text-[15px] font-normal text-white">
-          {toast}
-        </div>
-      )}
-
       <section className="mt-[181px] flex justify-center">
         <img src="/icons/Believe.svg" className="w-[165px]" />
       </section>
@@ -61,9 +41,13 @@ function Home() {
             <button
               key={item.id}
               onClick={() => navigate("/items")}
-              className="flex h-[100px] w-[100px] items-center justify-center bg-[#838383] text-[15px] font-medium"
+              className="h-[100px] w-[100px] overflow-hidden bg-[#838383]"
             >
-              {item.name}
+              <img
+                src={item.image}
+                alt={item.name}
+                className="h-full w-full object-cover"
+              />
             </button>
           ))}
 
@@ -87,14 +71,19 @@ function Home() {
 
         <button
           onClick={() => navigate("/mypage")}
-          className="mt-[10px] ml-[36px] flex h-[55px] w-[330px] flex-col items-start justify-center bg-[#D9D9D9] pl-[15px]"
+          className="mt-[10px] ml-[36px] flex h-[78px] w-[330px] flex-col items-start justify-center rounded-[10px] bg-[#F4F8FF] pl-[15px]"
         >
-          <p className="text-[12px]">
-            <span className="font-normal">{rentedItem.name}</span>{" "}
-            <span className="font-bold">대여중</span>
-          </p>
+          <div className="flex items-center gap-[10px]">
+            <span className="text-[16px] font-medium text-[#020913]">
+              {rentedItem.name}
+            </span>
 
-          <p className="text-[10px] leading-[18px] text-black">
+            <span className="flex h-[20px] w-[52px] items-center justify-center rounded-[13px] bg-[var(--color-main-3)] px-[8px] text-[8px] font-normal text-white">
+              대여중
+            </span>
+          </div>
+
+          <p className="text-[12px] leading-[18px] text-black">
             <span className="font-light">반납일자 | </span>
             <span className="font-light">{rentedItem.dueDate}</span>
           </p>
